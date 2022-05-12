@@ -1,0 +1,303 @@
+<script  src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
+<button onclick="Login();">Login</button>
+<button onclick="ForceLogin();">ForceLogin</button>
+<button onclick="Timer();">Timer</button>
+<br/><br/>
+<br/><br/><br/><br/>
+
+<button onclick="OnPlaceBet();">On Place Bet</button>
+<button onclick="registerPlayer();">Register Player</button>
+<p id='timer' ></p>
+
+<button onclick="OnTimer();">Game Play Timer</button>
+<!-- <select id="user">
+    <option value="FUN000001">FUN000001</option>
+    <option value="FUN000002">FUN000002</option>
+   
+</select> -->
+<!-- <select id="game">
+    <option value="1">American Roulette Timer</option>
+    <option value="3">Fun Target Timer</option>
+    <option value="3">Fun Target Timer</option>
+</select>
+<button onclick="registerPlayer();">Register Player</button>
+<br/><br/><br/><br/>
+
+<button onclick="OnPlaceBet();">On Place Bet</button>
+
+<button onclick="OnTimer();">Game Play Timer</button>
+
+<button onclick="OnUserInfo();">User Details</button>
+
+<button onclick="Disconnect();">Disconnect</button>
+
+<button onclick="OnWinNo()">OnWinNo</button>
+
+<button onclick="OnTakeAmt()">OnTakeAmt</button>
+
+<button onclick="OnPreBet()">Pre Round Bets</button>
+
+<button onclick="OnBetplace();">On Bet place</button>
+
+<button onclick="test();">test (show Bet)</button>
+
+<button onclick="onLeaveRoom();">On leave room</button> -->
+<script src="socket.io/socket.io.js"></script>
+<script>
+    // let socketId;
+    // let RoundCount
+    // var server = "http://localhost:5000/";
+    // // var server = "http://3.109.48.186:5000";
+
+    // var io = io(server, { transport : ['websocket'] });
+    const socket = io();
+ 
+    function Login(){
+        socket.emit("OnLogin", {user_id:'FUN000039' , password:'12345' ,device :'423456788123'});
+    } 
+    
+    function Timer(){
+        socket.emit("OnTimer", {user_id:'FUN000039'});
+    } 
+
+    socket.on("OnTimer", (data) => {
+      console.log('Timer ', data)
+    })
+    socket.on("OnLogin", (data) => {
+      console.log('My OnLogin ', data)
+    })
+    socket.on("OnWinAmount", (data) => {
+      console.log('OnWinAmount ', data)
+    })
+    socket.on("OnTimerStart", (data) => {
+      console.log('Timer ', data)
+    })
+    function ForceLogin(){
+        socket.emit("OnSignUp", {user_id:'FUN000039' , password:'12345' ,device :'423456788123'});
+    }
+    socket.on("OnSignUp", (data) => {
+    console.log('My OnSignUp ', data)
+})
+    function registerPlayer(){
+    	var user_id = 'FUN000039';
+        var game_id = 2;
+        socket.emit("RegisterPlayer", {playerId:user_id, balance:45000,gameId:game_id});
+    }
+
+    // function OnTimer(){
+    //     io.emit("OnTimer", {});
+    // }
+
+    // function OnUserInfo(){
+    //     io.emit("OnUserInfo", {});
+    // }
+
+
+    // function OnPreBet(){
+    //     var user_id = document.getElementById('user').value;
+    //     io.emit("OnPreBet", {playerId:user_id});
+    // }
+//     function Timer(){
+   
+//         console.log("start betting")
+//         socket.emit("OnTimerStart", 'obj');
+  
+// }
+    function OnPlaceBet(){
+        var user_id = 'FUN000039';
+        var game_id = 2;
+        if( game_id == 3){
+            var obj =  {playerId:user_id,
+                gameId:game_id,
+                points:10,
+                allcards:{no_0:0,no_1:0,no_2:0,no_3:0,no_4:0,no_5:0,no_6:0,no_7:0,no_8:0,no_9:10,no10:0,no11:0},
+                allFaceCards:{no_0:0,no_1:0,no_2:0,no_3:0},
+                faceCards:{no_0:0,no_1:0,no_2:10}
+            }
+        }
+        if( game_id == 2){
+            var obj =  {playerId:user_id,
+                gameId:game_id,
+                points:80,
+                allcards:{no_0:0,no_1:0,no_2:0,no_3:0,  
+                    no_4:0,no_5:0,no_6:50,no_7:0,
+                    no_8:0,no_9:0,no10:0,no11:0,
+                    no12:0,no13:0,no14:0,no15:0
+                },
+                allFaceCards:{no_0:15,no_1:0,no_2:0,no_3:10},
+                faceCards:{no_0:0,no_1:20,no_2:0,no_3:0}
+            }
+        }
+        if( game_id == 1){
+            var obj =  {playerId:user_id,
+                gameId:game_id,
+                points:10,
+                 single:[0,0,0,0,10,0,0,0,0,0],
+                 double:[
+                    2,0,0,0,10,0,0,0,0,0,
+                    0,0,0,0,10,0,0,0,0,0,
+                    0,0,0,0,10,0,0,0,0,0,
+                    0,0,0,0,10,0,0,0,0,0,
+                    0,0,0,0,10,0,0,0,0,0,
+                    0,0,0,0,10,0,0,0,0,0,
+                    0,0,0,0,10,0,0,0,0,0,
+                    0,0,0,0,10,0,0,0,0,0,
+                    0,0,0,10,0,0,0,0,0,0,
+                    0,0,0,0,10,0,0,0,0,0,
+                 ],
+                }
+            }   
+
+            if( game_id == 4){
+            var obj =  {playerId:user_id,
+                gameId:4,
+                points:22, 
+                 betArray:[
+                    2,0,0,0,10,0,0,0,0,0, 
+                 ],
+                }
+            }  
+        
+    	socket.emit("OnPlaceBet", obj);
+    }
+
+
+    // function OnWinNo(){
+    // 	io.emit("generateWinNo", {spot:"1",chip:"10",position:"left"});
+    // }
+
+    // function OnTakeAmt(){
+    //     var user_id = document.getElementById('user').value;
+    //     io.emit("OnTakeAmount", {playerId:user_id});
+    // }
+
+
+    // function Disconnect(){
+    // 	io.emit("Disconnec", {spot:"0",chip:"10",position:"left"});
+    // }
+
+
+    // function OnBetplace(){
+    //     io.emit("OnBetsPlaced", {spot:"0",chip:"10",position:"left"});
+    // }
+
+    
+    // function test(){
+    // 	io.emit("test", {spot:"0",chip:"10",position:"left"});
+    // }
+
+    // function onLeaveRoom(){
+    //     io.emit("onleaveRoom", {room:'dragon'});
+    // }
+
+
+
+    // //====================================Fun Target Timer===================================================
+
+    // io.on('error', function(err) {
+    //     console.log(err);
+    // })
+
+    // io.on('OnLogin', function(err) {
+    //     console.log(err);
+    // })
+
+    // io.on('OnForceExit', function(err) {
+    //     console.log("Forcely player out from game");
+    // })
+    socket.on("OnPlaceBet", function (data) { 
+
+        console.log('OnPlaceBet',data)
+    })
+    socket.on("OnCurrentTimer", function (data) {  //emit: current round info(previousWins,botsBetsDetails,user_bal)
+        console.log('OnCurrentTimer',data)
+        // Set the date we're counting down to
+            var countDownDate = data.gametimer;
+
+        // Update the count down every 1 second
+        var x = setInterval(function() { 
+        // Find the distance between now and the count down date
+        countDownDate = countDownDate - 1;
+            document.getElementById("timer").innerHTML = countDownDate;
+
+        // If the count down is over, write some text 
+        if (countDownDate < 0) {
+            clearInterval(x);
+            document.getElementById("timer").innerHTML = "EXPIRED";
+        }
+        }, 1000); 
+        // socketId = data.socketId
+        // RoundCount = data.RoundCount;
+    });
+
+    // io.on("OnBetsPlaced", function (data) {
+    //     console.log(data)
+    // })
+
+    // io.on("OnPreBet", function (data) {
+    //     console.log(data)
+    // })
+
+
+    // io.on("OnPlaceBet", function (data) {
+    //     console.log(data)
+    // });
+
+
+    socket.on("OnWinNo", function (data) {
+        console.log('Winning NO',data)
+    });
+
+
+    // io.on("OnWinAmount", function (data) {
+    //     console.log(data)
+    // });
+
+
+    // io.on("OnTakeAmount", function (data) {
+    //     console.log(data)
+    // });
+
+    
+    // io.on("OnPlayerWin", function (data) {
+    //     console.log(data)
+    // });
+
+
+    // io.on("onleaveRoom", function (data) { 
+    //     console.log(data)
+    // });
+
+
+
+    
+     
+    // io.on("OnTimeUp", function (data) {
+    //     console.log("stop betting")
+        
+    // });
+
+    // io.on("OnTimer", function (data) {
+    //     console.log(data)
+        
+    // });
+
+
+    
+    // //==========================================================================================================
+
+
+
+
+
+
+
+    
+
+
+	
+	 
+
+ </script>   
